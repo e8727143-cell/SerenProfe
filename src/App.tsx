@@ -85,7 +85,7 @@ export default function App() {
   const [session, setSession] = useState<{ user: { email: string } } | null>(null);
   const [topic, setTopic] = useState('');
   const [grade, setGrade] = useState('');
-  const [country, setCountry] = useState('MX');
+  const [country, setCountry] = useState('');
   const [loading, setLoading] = useState(false);
   const [generatedPlan, setGeneratedPlan] = useState<string | null>(null);
   const [history, setHistory] = useState<Plan[]>([]);
@@ -520,7 +520,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
             <img 
               src={LOGO_URL} 
               alt="SerenProfe Logo" 
-              className="w-28 h-28 md:w-36 md:h-36 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300" 
+              className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300" 
             />
             <h1 className="text-6xl sm:text-7xl font-bold tracking-tight font-serif bg-gradient-to-r from-teal-500 to-blue-800 bg-clip-text text-transparent pb-2">
               SerenProfe
@@ -568,36 +568,40 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
             >
               <form onSubmit={generatePlan} className="space-y-8">
                 
-                {/* Country Select */}
-                <div>
-                  <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
-                    <div className="flex items-center">
-                      <Globe className="w-4 h-4 mr-2 text-emerald-500" />
-                      ¿En qué país enseñas?
-                    </div>
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="w-full px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 outline-none appearance-none cursor-pointer text-gray-700 text-lg shadow-sm"
-                    >
-                      {COUNTRIES.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
+                {/* Horizontal Layout for Inputs on Desktop */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Country Select */}
+                  <div>
+                    <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
+                      <div className="flex items-center">
+                        <Globe className="w-4 h-4 mr-2 text-emerald-500" />
+                        ¿En qué país enseñas?
+                      </div>
+                    </label>
+                    <div className="relative">
+                      <select
+                        id="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="w-full px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 outline-none appearance-none cursor-pointer text-gray-700 text-lg shadow-sm"
+                        required
+                      >
+                        <option value="" disabled>Selecciona tu país</option>
+                        {COUNTRIES.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Topic Input */}
                   <div>
                     <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
                       <div className="flex items-center">
@@ -616,7 +620,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                     />
                   </div>
 
-                  {/* Adaptive Grade Dropdown */}
+                  {/* Grade Select */}
                   <div>
                     <label htmlFor="grade" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
                       <div className="flex items-center">

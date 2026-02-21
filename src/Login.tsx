@@ -65,7 +65,7 @@ export default function Login({ onLogin }: LoginProps) {
              <img 
               src={LOGO_URL} 
               alt="SerenProfe Logo" 
-              className="w-24 h-24 object-contain drop-shadow-lg" 
+              className="w-16 h-16 object-contain drop-shadow-lg" 
             />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2 font-serif">Bienvenido a <span className="text-emerald-600">Seren</span><span className="text-blue-600">Profe</span></h1>
