@@ -1,31 +1,35 @@
 import { useState, useEffect } from 'react';
 
-// Global state for the deferred prompt
-let globalDeferredPrompt: any = null;
+// Variable global para guardar el evento, fuera del ciclo de vida de React
+let deferredPrompt: any = null;
 
 export function usePWA() {
-  const [isInstallable, setIsInstallable] = useState(!!globalDeferredPrompt);
+  const [isInstallable, setIsInstallable] = useState(!!deferredPrompt);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
+    // Check if running in standalone mode (installed)
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
     }
 
     const handler = (e: Event) => {
+      // 1. Evitar que el navegador muestre su propio banner feo
       e.preventDefault();
-      globalDeferredPrompt = e;
+      // 2. Guardar el evento para usarlo después
+      deferredPrompt = e;
+      // 3. Actualizar estado para mostrar el botón
       setIsInstallable(true);
+      console.log('Evento beforeinstallprompt capturado');
     };
 
     window.addEventListener('beforeinstallprompt', handler);
 
     window.addEventListener('appinstalled', () => {
+      console.log('App instalada exitosamente');
       setIsInstalled(true);
       setIsInstallable(false);
-      globalDeferredPrompt = null;
-      console.log('PWA was installed');
+      deferredPrompt = null;
     });
 
     return () => {
@@ -34,20 +38,21 @@ export function usePWA() {
   }, []);
 
   const install = async () => {
-    if (!globalDeferredPrompt) {
-      // If the prompt isn't available, we can't force it.
-      // This happens on iOS or if the browser hasn't fired the event yet.
-      // We'll log it for now, but in a real app we might show a custom modal instructions.
-      console.log('Install prompt not available yet. User might need to use browser menu.');
-      alert('Para instalar, selecciona "Agregar a Inicio" en el menú de tu navegador.');
+    if (!deferredPrompt) {
+      console.log('No hay evento de instalación diferido');
       return;
     }
 
-    globalDeferredPrompt.prompt();
-    const { outcome } = await globalDeferredPrompt.userChoice;
+    // 4. Mostrar el cuadro de diálogo de instalación real
+    deferredPrompt.prompt();
     
+    // 5. Esperar la respuesta del usuario
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Usuario eligió: ${outcome}`);
+    
+    // 6. Limpiar la variable si se aceptó
     if (outcome === 'accepted') {
-      globalDeferredPrompt = null;
+      deferredPrompt = null;
       setIsInstallable(false);
     }
   };
