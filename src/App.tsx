@@ -1,11 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
-import { Loader2, Copy, Check, Sparkles, BookOpen, GraduationCap, History, Trash2, Globe, ArrowLeft, Leaf, Shield, Heart, FileText, Zap, Printer, FileType, LogOut, Settings } from 'lucide-react';
+import { Loader2, Copy, Check, Sparkles, BookOpen, GraduationCap, History, Trash2, Globe, ArrowLeft, Leaf, Shield, Heart, FileText, Zap, Printer, FileType, LogOut, Settings, Download } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { geminiService } from './lib/gemini';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
+import InstallPrompt from './components/InstallPrompt';
+import { usePWA } from './hooks/usePWA';
 
 interface Plan {
   id: number;
@@ -79,8 +81,6 @@ const LOGO_URL = "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/pub
 
 
 
-import InstallPrompt from './components/InstallPrompt';
-
 export default function App() {
   const [session, setSession] = useState<{ user: { email: string } } | null>(null);
   const [topic, setTopic] = useState('');
@@ -94,6 +94,7 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('Iniciando...');
   const [showAdmin, setShowAdmin] = useState(false);
+  const { isInstallable, isInstalled, install } = usePWA();
   
   // Loading steps messages
   const LOADING_STEPS = [
@@ -534,6 +535,17 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
 
               {/* Right: Window Controls */}
               <div className="flex items-center gap-2">
+                {!isInstalled && (
+                  <button 
+                    onClick={install}
+                    className="flex items-center gap-1 px-3 py-1.5 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors rounded-md text-xs font-medium border border-emerald-200"
+                    title="Instalar Aplicación"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Instalar</span>
+                  </button>
+                )}
+
                 {session?.user?.email === ADMIN_EMAIL && (
                   <button 
                     onClick={() => setShowAdmin(true)}
