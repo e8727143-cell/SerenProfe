@@ -1,17 +1,22 @@
 {
   "name": "SerenProfe",
   "short_name": "SerenProfe",
-  "description": "Asistente inteligente para docentes contra la burocracia.",
+  "description": "Tu asistente pedagógico personal.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#10b981",
+  "background_color": "#F5F9F7",
+  "theme_color": "#10B981",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/public/Galeria%20SerenProfe/logo%20pwa%20%20SerenProfe.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/public/Galeria%20SerenProfe/logo%20pwa%20%20SerenProfe.jpg",
       "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
+      "type": "image/jpeg"
     }
   ]
 }
