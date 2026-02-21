@@ -541,7 +541,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
             <div className="bg-gray-50 border-b border-gray-100 px-6 py-2 flex items-center justify-end select-none min-h-[48px]">
               {/* Right: Window Controls */}
               <div className="flex items-center gap-2">
-                {isInstallable && (
+                {!isInstalled && (
                   <button 
                     onClick={install}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors rounded-md text-xs font-medium border border-emerald-200"

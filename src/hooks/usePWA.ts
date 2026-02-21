@@ -35,6 +35,11 @@ export function usePWA() {
 
   const install = async () => {
     if (!globalDeferredPrompt) {
+      // If the prompt isn't available, we can't force it.
+      // This happens on iOS or if the browser hasn't fired the event yet.
+      // We'll log it for now, but in a real app we might show a custom modal instructions.
+      console.log('Install prompt not available yet. User might need to use browser menu.');
+      alert('Para instalar, selecciona "Agregar a Inicio" en el menú de tu navegador.');
       return;
     }
 
