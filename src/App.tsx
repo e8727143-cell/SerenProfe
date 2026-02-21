@@ -790,6 +790,11 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
       
       {/* Install PWA Prompt */}
       <InstallPrompt />
+      
+      {/* Version & Debug Info (Hidden in production usually, but helpful now) */}
+      <div className="fixed bottom-1 right-1 text-[10px] text-gray-300 pointer-events-none select-none">
+        v1.0.5 | PWA: {isInstalled ? 'Installed' : isInstallable ? 'Ready' : 'Checking...'}
+      </div>
     </div>
   );
 }
