@@ -2,6 +2,7 @@
   "name": "SerenProfe",
   "short_name": "SerenProfe",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#10b981",
