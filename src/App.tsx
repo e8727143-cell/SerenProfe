@@ -6,6 +6,8 @@ import { supabase } from './lib/supabase';
 import { geminiService } from './lib/gemini';
 import Login from './Login';
 import AdminPanel from './AdminPanel';
+import { usePWAInstall } from './hooks/usePWAInstall';
+import { InstallPrompt } from './components/InstallPrompt';
 
 interface Plan {
   id: number;
@@ -93,6 +95,9 @@ export default function App() {
   const [loadingMessage, setLoadingMessage] = useState('Iniciando...');
   const [showAdmin, setShowAdmin] = useState(false);
   
+  // PWA Install Hook
+  const { showInstallPrompt, installPWA } = usePWAInstall();
+
   // Loading steps messages
   const LOADING_STEPS = [
     "Conectando con el cerebro pedagógico...",
@@ -107,23 +112,48 @@ export default function App() {
   const [survivalMode, setSurvivalMode] = useState<'practical' | 'inspection'>('practical');
   const [selectedInclusions, setSelectedInclusions] = useState<string[]>([]);
 
-  // Auth check (Local Storage)
+  // Supabase Auth Listener
   useEffect(() => {
-    const storedEmail = localStorage.getItem('serenprofe_user_email');
-    if (storedEmail) {
-      setSession({ user: { email: storedEmail } });
-    }
+    // Check for session on initial load
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setSession({ user: { email: session.user.email || '' } });
+        localStorage.setItem('serenprofe_user_email', session.user.email || '');
+      } else {
+        localStorage.removeItem('serenprofe_user_email');
+      }
+    });
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        setSession({ user: { email: session.user.email || '' } });
+        localStorage.setItem('serenprofe_user_email', session.user.email || '');
+      } else {
+        setSession(null);
+        localStorage.removeItem('serenprofe_user_email');
+      }
+    });
+
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, []);
 
-  const handleLogin = (email: string) => {
+  const handleLogin = async (email: string) => {
+    // This function is now primarily for the soft login in Login.tsx
+    // The actual Supabase auth state change will be handled by the listener
     localStorage.setItem('serenprofe_user_email', email);
     setSession({ user: { email } });
   };
 
   const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error signing out:', error.message);
+    }
     localStorage.removeItem('serenprofe_user_email');
     setSession(null);
-    // Optional: await supabase.auth.signOut(); if we were using real auth
   };
 
   // Get available grades based on selected country
@@ -550,6 +580,11 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
             Recupera tu paz mental y genera estructuras de clase completas en segundos.
           </p>
         </motion.div>
+
+        {/* Install Prompt */}
+        <AnimatePresence>
+          {showInstallPrompt && <InstallPrompt onInstall={installPWA} />}
+        </AnimatePresence>
 
         {/* Admin Panel Modal */}
         {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
