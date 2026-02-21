@@ -33,8 +33,6 @@ export function usePWA() {
 
   const install = async () => {
     if (!deferredPrompt) {
-      // Fallback for iOS or if prompt is not available
-      alert('Para instalar SerenProfe:\n\n1. Presiona el botón "Compartir" o menú del navegador.\n2. Selecciona "Agregar a Inicio".');
       return;
     }
 

@@ -507,8 +507,26 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
 
   // Main Form View
   return (
-    <div className="min-h-screen bg-[#F5F9F7] text-gray-800 font-sans selection:bg-emerald-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F5F9F7] text-gray-800 font-sans selection:bg-emerald-200 flex flex-col items-center justify-center p-4">
       
+      {/* Header - Outside Container */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center justify-center mb-6"
+      >
+        <div className="flex items-center justify-center gap-3">
+          <img 
+            src={LOGO_URL} 
+            alt="SerenProfe Logo" 
+            className="w-12 h-12 object-contain drop-shadow-sm" 
+          />
+          <h1 className="text-3xl font-bold font-serif bg-gradient-to-r from-teal-600 to-blue-800 bg-clip-text text-transparent pb-1">
+            SerenProfe
+          </h1>
+        </div>
+      </motion.div>
+
       {/* Main "Window" Container */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.98 }}
@@ -519,26 +537,14 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
         <div className="p-[3px] rounded-3xl bg-gradient-to-r from-emerald-500 to-blue-900 shadow-2xl">
           <div className="bg-white rounded-[20px] overflow-hidden flex flex-col min-h-[80vh]">
             
-            {/* Window Title Bar */}
-            <div className="bg-gray-100 border-b border-gray-200 px-6 py-3 flex items-center justify-between select-none">
-              {/* Left: App Identity */}
-              <div className="flex items-center gap-3">
-                <img 
-                  src={LOGO_URL} 
-                  alt="SerenProfe Logo" 
-                  className="w-6 h-6 object-contain" 
-                />
-                <span className="text-sm font-bold text-gray-600 tracking-wide">
-                  SerenProfe
-                </span>
-              </div>
-
+            {/* Window Title Bar - Controls Only */}
+            <div className="bg-gray-50 border-b border-gray-100 px-6 py-2 flex items-center justify-end select-none min-h-[48px]">
               {/* Right: Window Controls */}
               <div className="flex items-center gap-2">
-                {!isInstalled && (
+                {isInstallable && (
                   <button 
                     onClick={install}
-                    className="flex items-center gap-1 px-3 py-1.5 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors rounded-md text-xs font-medium border border-emerald-200"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors rounded-md text-xs font-medium border border-emerald-200"
                     title="Instalar Aplicación"
                   >
                     <Download className="w-3.5 h-3.5" />
