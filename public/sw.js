@@ -1,4 +1,4 @@
-const CACHE_NAME = 'teacher-magic-v1';
+const CACHE_NAME = 'seren-profe-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

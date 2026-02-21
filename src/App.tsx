@@ -506,288 +506,264 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
 
   // Main Form View
   return (
-    <div className="min-h-screen bg-[#F5F9F7] text-gray-800 font-sans selection:bg-emerald-200 relative">
-      <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Header - Redesigned & Centered */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center justify-center mb-16"
-        >
-          {/* Logo and Title Row */}
-          <div className="flex items-center justify-center gap-4 mb-6 relative">
-            <img 
-              src={LOGO_URL} 
-              alt="SerenProfe Logo" 
-              className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300" 
-            />
-            <h1 className="text-6xl sm:text-7xl font-bold tracking-tight font-serif bg-gradient-to-r from-teal-500 to-blue-800 bg-clip-text text-transparent pb-2">
-              SerenProfe
-            </h1>
+    <div className="min-h-screen bg-[#F5F9F7] text-gray-800 font-sans selection:bg-emerald-200 flex items-center justify-center p-4">
+      
+      {/* Main "Window" Container - Everything inside */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-7xl relative"
+      >
+        {/* Gradient Border Wrapper */}
+        <div className="p-[3px] rounded-3xl bg-gradient-to-r from-emerald-500 to-blue-900 shadow-2xl">
+          <div className="bg-white rounded-[20px] overflow-hidden flex flex-col min-h-[80vh]">
             
-            {/* Logout Button Absolute */}
-            <div className="absolute -right-32 top-1/2 -translate-y-1/2 flex items-center space-x-2">
-              {session?.user?.email === ADMIN_EMAIL && (
+            {/* Window Header / Toolbar */}
+            <div className="bg-gray-50 border-b border-gray-100 px-6 py-3 flex items-center justify-between">
+              {/* Logo & Title */}
+              <div className="flex items-center gap-3">
+                <img 
+                  src={LOGO_URL} 
+                  alt="SerenProfe Logo" 
+                  className="w-8 h-8 object-contain" 
+                />
+                <h1 className="text-xl font-bold font-serif bg-gradient-to-r from-teal-600 to-blue-800 bg-clip-text text-transparent">
+                  SerenProfe
+                </h1>
+              </div>
+
+              {/* Window Controls */}
+              <div className="flex items-center gap-2">
+                {session?.user?.email === ADMIN_EMAIL && (
+                  <button 
+                    onClick={() => setShowAdmin(true)}
+                    className="p-1.5 text-gray-400 hover:text-emerald-600 transition-colors rounded-md hover:bg-emerald-50"
+                    title="Panel de Administración"
+                  >
+                    <Settings className="w-4 h-4" />
+                  </button>
+                )}
                 <button 
-                  onClick={() => setShowAdmin(true)}
-                  className="p-2 text-gray-400 hover:text-emerald-600 transition-colors rounded-full hover:bg-emerald-50"
-                  title="Panel de Administración"
+                  onClick={handleLogout}
+                  className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
+                  title="Cerrar Sesión"
                 >
-                  <Settings className="w-6 h-6" />
+                  <LogOut className="w-4 h-4" />
                 </button>
-              )}
-              <button 
-                onClick={handleLogout}
-                className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
-                title="Cerrar Sesión"
-              >
-                <LogOut className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-          
-          {/* Subtitle Below */}
-          <p className="text-xl text-gray-600 max-w-2xl text-center font-light leading-relaxed">
-            Recupera tu paz mental y genera estructuras de clase completas en segundos.
-          </p>
-        </motion.div>
-
-        {/* Admin Panel Modal */}
-        {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Main Form */}
-          <div className="lg:col-span-8 lg:col-start-3 space-y-6">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white rounded-3xl p-8 shadow-xl shadow-emerald-100/50 border border-emerald-50"
-            >
-              <form onSubmit={generatePlan} className="space-y-8">
-                
-                {/* Horizontal Layout for Inputs on Desktop */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Country Select */}
-                  <div>
-                    <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
-                      <div className="flex items-center">
-                        <Globe className="w-4 h-4 mr-2 text-emerald-500" />
-                        ¿En qué país enseñas?
-                      </div>
-                    </label>
-                    <div className="relative">
-                      <select
-                        id="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        className="w-full px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 outline-none appearance-none cursor-pointer text-gray-700 text-lg shadow-sm"
-                        required
-                      >
-                        <option value="" disabled>Selecciona tu país</option>
-                        {COUNTRIES.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Topic Input */}
-                  <div>
-                    <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
-                      <div className="flex items-center">
-                        <BookOpen className="w-4 h-4 mr-2 text-emerald-500" />
-                        Tema de la clase
-                      </div>
-                    </label>
-                    <input
-                      id="topic"
-                      type="text"
-                      value={topic}
-                      onChange={(e) => setTopic(e.target.value)}
-                      placeholder="Ej. El Ciclo del Agua"
-                      className="w-full px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 outline-none placeholder-gray-400 text-lg shadow-sm"
-                      required
-                    />
-                  </div>
-
-                  {/* Grade Select */}
-                  <div>
-                    <label htmlFor="grade" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
-                      <div className="flex items-center">
-                        <GraduationCap className="w-4 h-4 mr-2 text-emerald-500" />
-                        Grado escolar
-                      </div>
-                    </label>
-                    <div className="relative">
-                      <select
-                        id="grade"
-                        value={grade}
-                        onChange={(e) => setGrade(e.target.value)}
-                        className="w-full px-4 py-4 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 outline-none appearance-none cursor-pointer text-gray-700 text-lg shadow-sm"
-                        required
-                      >
-                        <option value="" disabled>Selecciona el grado</option>
-                        {availableGrades.map((g) => (
-                          <option key={g} value={g}>
-                            {g}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Survival Mode Toggle */}
-                <div className="bg-emerald-50/50 rounded-2xl p-4 border border-emerald-100">
-                  <label className="block text-sm font-medium text-gray-700 mb-3 ml-1">
-                    <div className="flex items-center">
-                      <Shield className="w-4 h-4 mr-2 text-emerald-500" />
-                      Modo de Planeación (Escudo Legal)
-                    </div>
-                  </label>
-                  <div className="flex bg-white p-1 rounded-xl border border-emerald-100 shadow-sm">
-                    <button
-                      type="button"
-                      onClick={() => setSurvivalMode('practical')}
-                      className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center ${
-                        survivalMode === 'practical' 
-                          ? 'bg-emerald-100 text-emerald-800 shadow-sm' 
-                          : 'text-gray-500 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Zap className="w-4 h-4 mr-2" />
-                      Práctico (Aula)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSurvivalMode('inspection')}
-                      className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center ${
-                        survivalMode === 'inspection' 
-                          ? 'bg-blue-100 text-blue-800 shadow-sm' 
-                          : 'text-gray-500 hover:bg-gray-50'
-                      }`}
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Inspección (Detallado)
-                    </button>
-                  </div>
-                </div>
-
-                {/* Inclusion Selector (Heart Module) */}
-                <div className="bg-purple-50/50 rounded-2xl p-4 border border-purple-100">
-                  <label className="block text-sm font-medium text-gray-700 mb-3 ml-1">
-                    <div className="flex items-center">
-                      <Heart className="w-4 h-4 mr-2 text-purple-500" />
-                      Corazón Ético (Inclusión y Diversidad)
-                    </div>
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {INCLUSION_OPTIONS.map((option) => (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => toggleInclusion(option.id)}
-                        className={`py-2 px-4 rounded-full text-sm font-medium transition-all duration-200 border ${
-                          selectedInclusions.includes(option.id)
-                            ? 'bg-purple-100 text-purple-800 border-purple-200 shadow-sm'
-                            : 'bg-white text-gray-600 border-gray-200 hover:border-purple-200 hover:bg-purple-50'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading || !topic || !grade}
-                  className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold text-lg shadow-lg shadow-emerald-200/50 transition-all duration-200 transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center mt-4"
-                >
-                  Generar Planeación + Evidencias
-                  <Sparkles className="w-5 h-5 ml-2" />
-                </button>
-              </form>
-            </motion.div>
-
-            {/* History Toggle Button */}
-            <div className="flex justify-center">
-               <button 
-                onClick={() => setShowHistory(!showHistory)}
-                className="text-emerald-600 hover:text-emerald-800 font-medium flex items-center text-sm bg-white px-4 py-2 rounded-full shadow-sm border border-emerald-100 hover:shadow-md transition-all"
-               >
-                 <History className="w-4 h-4 mr-2" />
-                 {showHistory ? 'Ocultar Historial' : 'Ver Historial de Planeaciones'}
-               </button>
+              </div>
             </div>
 
-            {/* History Section */}
-            <AnimatePresence>
-              {showHistory && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="bg-white rounded-3xl p-6 shadow-sm border border-emerald-50/50 mt-4">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Tus Planeaciones Anteriores</h3>
-                    {history.length === 0 ? (
-                      <p className="text-sm text-gray-400 text-center py-4">No hay planeaciones guardadas aún.</p>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {history.map((plan) => (
-                          <div 
-                            key={plan.id}
-                            onClick={() => {
-                              setGeneratedPlan(plan.contenido);
-                              setTopic(plan.tema);
-                              setGrade(plan.grado);
-                              setShowHistory(false);
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            className="group p-4 rounded-xl bg-gray-50 hover:bg-emerald-50 cursor-pointer transition-all border border-transparent hover:border-emerald-100 relative shadow-sm hover:shadow-md"
+            {/* Main Content Area */}
+            <div className="p-6 lg:p-8 flex-grow">
+              <form onSubmit={generatePlan} className="h-full flex flex-col">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+                  
+                  {/* Column 1: Configuration */}
+                  <div className="flex flex-col gap-5">
+                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                      <Settings className="w-4 h-4" />
+                      <span>Configuración</span>
+                    </div>
+
+                    {/* Country */}
+                    <div>
+                      <label htmlFor="country" className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        País
+                      </label>
+                      <div className="relative">
+                        <select
+                          id="country"
+                          value={country}
+                          onChange={(e) => setCountry(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none appearance-none cursor-pointer text-gray-700 text-sm font-medium"
+                        >
+                          <option value="" disabled>Selecciona tu país</option>
+                          {COUNTRIES.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
+                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Grade */}
+                    <div>
+                      <label htmlFor="grade" className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Grado Escolar
+                      </label>
+                      <div className="relative">
+                        <select
+                          id="grade"
+                          value={grade}
+                          onChange={(e) => setGrade(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none appearance-none cursor-pointer text-gray-700 text-sm font-medium"
+                          required
+                        >
+                          <option value="" disabled>Selecciona el grado</option>
+                          {availableGrades.map((g) => (
+                            <option key={g} value={g}>
+                              {g}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
+                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Split Row: Mode & Inclusion */}
+                    <div className="flex gap-4 flex-grow">
+                      {/* Mode */}
+                      <div className="flex-1 flex flex-col">
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                          Modo
+                        </label>
+                        <div className="flex flex-col gap-2 h-full">
+                          <button
+                            type="button"
+                            onClick={() => setSurvivalMode('practical')}
+                            className={`flex-1 py-2 px-2 rounded-xl text-xs font-medium transition-all flex flex-col items-center justify-center text-center gap-2 border ${
+                              survivalMode === 'practical' 
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm' 
+                                : 'bg-white text-gray-500 hover:bg-gray-50 border-gray-200'
+                            }`}
                           >
-                            <div className="font-medium text-gray-800 truncate pr-6">{plan.tema}</div>
-                            <div className="text-sm text-gray-500 mt-1">{plan.grado}</div>
-                            <div className="text-xs text-gray-400 mt-2">
-                              {new Date(plan.created_at).toLocaleDateString()}
-                            </div>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deletePlan(plan.id);
-                              }}
-                              className="absolute top-4 right-4 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
+                            <Zap className="w-5 h-5" />
+                            Práctico
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSurvivalMode('inspection')}
+                            className={`flex-1 py-2 px-2 rounded-xl text-xs font-medium transition-all flex flex-col items-center justify-center text-center gap-2 border ${
+                              survivalMode === 'inspection' 
+                                ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-sm' 
+                                : 'bg-white text-gray-500 hover:bg-gray-50 border-gray-200'
+                            }`}
+                          >
+                            <FileText className="w-5 h-5" />
+                            Inspección
+                          </button>
+                        </div>
                       </div>
-                    )}
+
+                      {/* Inclusion */}
+                      <div className="flex-1 flex flex-col">
+                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                          Corazón Ético
+                        </label>
+                        <div className="bg-gray-50 rounded-xl p-2 border border-gray-200 h-full overflow-y-auto custom-scrollbar flex flex-col gap-1.5">
+                          {INCLUSION_OPTIONS.map((option) => (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => toggleInclusion(option.id)}
+                              className={`py-2 px-2 rounded-lg text-[10px] font-medium transition-all text-left leading-tight border ${
+                                selectedInclusions.includes(option.id)
+                                  ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-sm'
+                                  : 'bg-white text-gray-500 border-transparent hover:bg-gray-100'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
+                  {/* Column 2: Topic & Action */}
+                  <div className="flex flex-col gap-5">
+                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                      <BookOpen className="w-4 h-4" />
+                      <span>Tema de la Clase</span>
+                    </div>
+                    
+                    <div className="flex-grow flex flex-col relative">
+                      <textarea
+                        id="topic"
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        placeholder="Describe el tema, objetivo o contenido..."
+                        className="w-full h-full p-5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none placeholder-gray-400 text-lg resize-none"
+                        required
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading || !topic || !grade}
+                      className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg shadow-lg shadow-emerald-200/50 transition-all transform active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      Generar Planeación
+                    </button>
+                  </div>
+
+                  {/* Column 3: History */}
+                  <div className="flex flex-col gap-5 h-full max-h-[400px] lg:max-h-none">
+                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                      <History className="w-4 h-4" />
+                      <span>Historial</span>
+                    </div>
+                    
+                    <div className="flex-grow bg-gray-50 rounded-xl border border-gray-200 p-3 overflow-y-auto custom-scrollbar">
+                      {history.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center text-gray-400 text-center p-4">
+                          <History className="w-8 h-8 mb-2 opacity-20" />
+                          <p className="text-xs">Sin historial reciente.</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {history.map((plan) => (
+                            <div 
+                              key={plan.id}
+                              onClick={() => {
+                                setGeneratedPlan(plan.contenido);
+                                setTopic(plan.tema);
+                                setGrade(plan.grado);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="group p-3 rounded-lg bg-white hover:bg-emerald-50 cursor-pointer transition-all border border-gray-100 hover:border-emerald-200 relative shadow-sm"
+                            >
+                              <div className="font-medium text-gray-800 truncate pr-6 text-xs">{plan.tema}</div>
+                              <div className="text-[10px] text-gray-500 mt-1 flex justify-between items-center">
+                                <span className="truncate max-w-[60%]">{plan.grado}</span>
+                                <span className="text-gray-400">{new Date(plan.created_at).toLocaleDateString()}</span>
+                              </div>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deletePlan(plan.id);
+                                }}
+                                className="absolute top-2 right-2 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Admin Panel Modal */}
+      {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
+      
       {/* Install PWA Prompt */}
       <InstallPrompt />
     </div>
