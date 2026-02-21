@@ -508,44 +508,46 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
   return (
     <div className="min-h-screen bg-[#F5F9F7] text-gray-800 font-sans selection:bg-emerald-200 flex items-center justify-center p-4">
       
-      {/* Main "Window" Container - Everything inside */}
+      {/* Main "Window" Container */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-7xl relative"
+        className="w-full max-w-7xl relative shadow-2xl rounded-[20px] overflow-hidden"
       >
-        {/* Gradient Border Wrapper */}
-        <div className="p-[3px] rounded-3xl bg-gradient-to-r from-emerald-500 to-blue-900 shadow-2xl">
-          <div className="bg-white rounded-[20px] overflow-hidden flex flex-col min-h-[80vh]">
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-500 via-emerald-600 to-blue-900 animate-gradient-xy bg-[length:400%_400%]"></div>
+
+        {/* Content Wrapper */}
+        <div className="relative flex flex-col min-h-[85vh]">
             
-            {/* Window Header / Toolbar */}
-            <div className="bg-gray-50 border-b border-gray-100 px-6 py-3 flex items-center justify-between">
-              {/* Logo & Title */}
+            {/* Window Title Bar (Transparent/Glass) */}
+            <div className="bg-black/10 backdrop-blur-sm border-b border-white/10 px-6 py-3 flex items-center justify-between select-none">
+              {/* Left: App Identity */}
               <div className="flex items-center gap-3">
                 <img 
                   src={LOGO_URL} 
                   alt="SerenProfe Logo" 
-                  className="w-8 h-8 object-contain" 
+                  className="w-6 h-6 object-contain brightness-0 invert" 
                 />
-                <h1 className="text-xl font-bold font-serif bg-gradient-to-r from-teal-600 to-blue-800 bg-clip-text text-transparent">
+                <span className="text-sm font-bold text-white tracking-wide opacity-90">
                   SerenProfe
-                </h1>
+                </span>
               </div>
 
-              {/* Window Controls */}
+              {/* Right: Window Controls */}
               <div className="flex items-center gap-2">
                 {session?.user?.email === ADMIN_EMAIL && (
                   <button 
                     onClick={() => setShowAdmin(true)}
-                    className="p-1.5 text-gray-400 hover:text-emerald-600 transition-colors rounded-md hover:bg-emerald-50"
-                    title="Panel de Administración"
+                    className="p-1.5 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
+                    title="Configuración"
                   >
                     <Settings className="w-4 h-4" />
                   </button>
                 )}
                 <button 
                   onClick={handleLogout}
-                  className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
+                  className="p-1.5 text-white/70 hover:text-red-300 transition-colors rounded hover:bg-white/10"
                   title="Cerrar Sesión"
                 >
                   <LogOut className="w-4 h-4" />
@@ -554,20 +556,20 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
             </div>
 
             {/* Main Content Area */}
-            <div className="p-6 lg:p-8 flex-grow">
-              <form onSubmit={generatePlan} className="h-full flex flex-col">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+            <div className="p-6 lg:p-8 flex-grow flex flex-col">
+              <form onSubmit={generatePlan} className="flex-grow flex flex-col">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
                   
                   {/* Column 1: Configuration */}
-                  <div className="flex flex-col gap-5">
-                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-2 text-white/90 font-semibold border-b border-white/20 pb-2 mb-2">
                       <Settings className="w-4 h-4" />
                       <span>Configuración</span>
                     </div>
 
                     {/* Country */}
                     <div>
-                      <label htmlFor="country" className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      <label htmlFor="country" className="block text-[10px] font-bold text-white/70 uppercase tracking-wider mb-1.5">
                         País
                       </label>
                       <div className="relative">
@@ -575,7 +577,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                           id="country"
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none appearance-none cursor-pointer text-gray-700 text-sm font-medium"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-gray-700 border-transparent focus:ring-2 focus:ring-emerald-300 outline-none appearance-none cursor-pointer text-sm font-medium shadow-lg"
                         >
                           <option value="" disabled>Selecciona tu país</option>
                           {COUNTRIES.map((c) => (
@@ -585,7 +587,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                           ))}
                         </select>
                         <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                           </svg>
                         </div>
@@ -594,15 +596,15 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
 
                     {/* Grade */}
                     <div>
-                      <label htmlFor="grade" className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
-                        Grado Escolar
+                      <label htmlFor="grade" className="block text-[10px] font-bold text-white/70 uppercase tracking-wider mb-1.5">
+                        Grado
                       </label>
                       <div className="relative">
                         <select
                           id="grade"
                           value={grade}
                           onChange={(e) => setGrade(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none appearance-none cursor-pointer text-gray-700 text-sm font-medium"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-gray-700 border-transparent focus:ring-2 focus:ring-emerald-300 outline-none appearance-none cursor-pointer text-sm font-medium shadow-lg"
                           required
                         >
                           <option value="" disabled>Selecciona el grado</option>
@@ -613,76 +615,78 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                           ))}
                         </select>
                         <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
                           </svg>
                         </div>
                       </div>
                     </div>
 
-                    {/* Split Row: Mode & Inclusion */}
-                    <div className="flex gap-4 flex-grow">
+                    {/* Row: Mode & Inclusion (Side by Side) */}
+                    <div className="flex gap-4">
                       {/* Mode */}
-                      <div className="flex-1 flex flex-col">
-                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      <div className="flex-1">
+                        <label className="block text-[10px] font-bold text-white/70 uppercase tracking-wider mb-1.5">
                           Modo
                         </label>
-                        <div className="flex flex-col gap-2 h-full">
-                          <button
-                            type="button"
-                            onClick={() => setSurvivalMode('practical')}
-                            className={`flex-1 py-2 px-2 rounded-xl text-xs font-medium transition-all flex flex-col items-center justify-center text-center gap-2 border ${
-                              survivalMode === 'practical' 
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-sm' 
-                                : 'bg-white text-gray-500 hover:bg-gray-50 border-gray-200'
-                            }`}
+                        <div className="relative">
+                          <select
+                            value={survivalMode}
+                            onChange={(e) => setSurvivalMode(e.target.value as 'practical' | 'inspection')}
+                            className="w-full px-4 py-3 rounded-xl bg-white text-gray-700 border-transparent focus:ring-2 focus:ring-emerald-300 outline-none appearance-none cursor-pointer text-sm font-medium shadow-lg"
                           >
-                            <Zap className="w-5 h-5" />
-                            Práctico
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setSurvivalMode('inspection')}
-                            className={`flex-1 py-2 px-2 rounded-xl text-xs font-medium transition-all flex flex-col items-center justify-center text-center gap-2 border ${
-                              survivalMode === 'inspection' 
-                                ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-sm' 
-                                : 'bg-white text-gray-500 hover:bg-gray-50 border-gray-200'
-                            }`}
-                          >
-                            <FileText className="w-5 h-5" />
-                            Inspección
-                          </button>
+                            <option value="practical">Práctico (Aula)</option>
+                            <option value="inspection">Inspección</option>
+                          </select>
+                          <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Inclusion */}
-                      <div className="flex-1 flex flex-col">
-                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                      {/* Inclusion (Custom Dropdown Trigger) */}
+                      <div className="flex-1 relative group">
+                        <label className="block text-[10px] font-bold text-white/70 uppercase tracking-wider mb-1.5">
                           Corazón Ético
                         </label>
-                        <div className="bg-gray-50 rounded-xl p-2 border border-gray-200 h-full overflow-y-auto custom-scrollbar flex flex-col gap-1.5">
+                        <button
+                          type="button"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-gray-700 border-transparent focus:ring-2 focus:ring-emerald-300 outline-none text-left text-sm font-medium shadow-lg flex justify-between items-center"
+                        >
+                          <span className="truncate">
+                            {selectedInclusions.length > 0 ? `${selectedInclusions.length} Seleccionados` : 'Ninguno'}
+                          </span>
+                          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        
+                        {/* Hover Dropdown Menu */}
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl p-2 z-20 hidden group-hover:block hover:block">
                           {INCLUSION_OPTIONS.map((option) => (
-                            <button
+                            <div 
                               key={option.id}
-                              type="button"
                               onClick={() => toggleInclusion(option.id)}
-                              className={`py-2 px-2 rounded-lg text-[10px] font-medium transition-all text-left leading-tight border ${
+                              className={`px-3 py-2 rounded-lg text-xs cursor-pointer flex items-center justify-between mb-1 ${
                                 selectedInclusions.includes(option.id)
-                                  ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-sm'
-                                  : 'bg-white text-gray-500 border-transparent hover:bg-gray-100'
+                                  ? 'bg-purple-50 text-purple-700 font-medium'
+                                  : 'text-gray-600 hover:bg-gray-50'
                               }`}
                             >
                               {option.label}
-                            </button>
+                              {selectedInclusions.includes(option.id) && <Check className="w-3 h-3" />}
+                            </div>
                           ))}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Column 2: Topic & Action */}
-                  <div className="flex flex-col gap-5">
-                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                  {/* Column 2: Topic */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-2 text-white/90 font-semibold border-b border-white/20 pb-2 mb-2">
                       <BookOpen className="w-4 h-4" />
                       <span>Tema de la Clase</span>
                     </div>
@@ -693,31 +697,23 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                         value={topic}
                         onChange={(e) => setTopic(e.target.value)}
                         placeholder="Describe el tema, objetivo o contenido..."
-                        className="w-full h-full p-5 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none placeholder-gray-400 text-lg resize-none"
+                        className="w-full h-full p-5 rounded-xl bg-white/95 backdrop-blur text-gray-800 border-transparent focus:ring-2 focus:ring-emerald-300 transition-all outline-none placeholder-gray-400 text-lg resize-none shadow-lg"
                         required
                       />
                     </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading || !topic || !grade}
-                      className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-lg shadow-lg shadow-emerald-200/50 transition-all transform active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                      Generar Planeación
-                    </button>
                   </div>
 
                   {/* Column 3: History */}
-                  <div className="flex flex-col gap-5 h-full max-h-[400px] lg:max-h-none">
-                    <div className="flex items-center gap-2 text-emerald-800 font-semibold border-b border-emerald-100 pb-2 mb-1">
+                  <div className="flex flex-col gap-4 h-full max-h-[400px] lg:max-h-none">
+                    <div className="flex items-center gap-2 text-white/90 font-semibold border-b border-white/20 pb-2 mb-2">
                       <History className="w-4 h-4" />
                       <span>Historial</span>
                     </div>
                     
-                    <div className="flex-grow bg-gray-50 rounded-xl border border-gray-200 p-3 overflow-y-auto custom-scrollbar">
+                    <div className="flex-grow bg-white/10 backdrop-blur-md rounded-xl border border-white/10 p-3 overflow-y-auto custom-scrollbar">
                       {history.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-400 text-center p-4">
-                          <History className="w-8 h-8 mb-2 opacity-20" />
+                        <div className="h-full flex flex-col items-center justify-center text-white/50 text-center p-4">
+                          <History className="w-8 h-8 mb-2 opacity-50" />
                           <p className="text-xs">Sin historial reciente.</p>
                         </div>
                       ) : (
@@ -731,7 +727,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                                 setGrade(plan.grado);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                               }}
-                              className="group p-3 rounded-lg bg-white hover:bg-emerald-50 cursor-pointer transition-all border border-gray-100 hover:border-emerald-200 relative shadow-sm"
+                              className="group p-3 rounded-lg bg-white/90 hover:bg-white cursor-pointer transition-all border border-transparent relative shadow-sm"
                             >
                               <div className="font-medium text-gray-800 truncate pr-6 text-xs">{plan.tema}</div>
                               <div className="text-[10px] text-gray-500 mt-1 flex justify-between items-center">
@@ -743,7 +739,7 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                                   e.stopPropagation();
                                   deletePlan(plan.id);
                                 }}
-                                className="absolute top-2 right-2 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="absolute top-2 right-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                               >
                                 <Trash2 className="w-3 h-3" />
                               </button>
@@ -755,9 +751,19 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
                   </div>
 
                 </div>
+
+                {/* Footer Button - Full Width */}
+                <div className="mt-6 lg:col-span-3">
+                  <button
+                    type="submit"
+                    disabled={loading || !topic || !grade}
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-emerald-950 font-bold text-xl shadow-xl shadow-emerald-900/20 transition-all transform active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed border border-white/20"
+                  >
+                    Generar Planeación
+                  </button>
+                </div>
               </form>
             </div>
-          </div>
         </div>
       </motion.div>
 
