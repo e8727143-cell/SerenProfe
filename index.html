@@ -1,29 +1,90 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SerenProfe - Tu Asistente Pedagógico</title>
-    <link rel="manifest" href="/manifest.json">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerenProfe</title>
+    <link rel="manifest" href="/public/manifest.json">
     <meta name="theme-color" content="#10b981">
     <link rel="apple-touch-icon" href="https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/public/Galeria%20SerenProfe/logo%20pwa%20%20SerenProfe.jpg">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-      }
-    </script>
-  </body>
-</html>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .pwa-install-btn { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center p-4">
 
+    <div id="installBanner" class="pwa-install-btn w-full max-w-md bg-emerald-600 text-white p-4 rounded-xl shadow-lg mb-6 flex justify-between items-center animate-bounce">
+        <p class="font-bold">✨ ¡Instala SerenProfe en tu celular!</p>
+        <button onclick="ejecutarInstalacion()" class="bg-white text-emerald-600 px-4 py-2 rounded-lg font-bold text-sm">INSTALAR</button>
+    </div>
+
+    <header class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-emerald-800">SerenProfe</h1>
+        <p class="text-slate-600">Recupera tu paz mental en segundos</p>
+    </header>
+
+    <main class="w-full max-w-md bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">¿En qué país enseñas?</label>
+                <select id="pais" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="México">México</option>
+                    <option value="España">España</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Chile">Chile</option>
+                    <option value="EEUU">Estados Unidos (Español)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Tema de la clase</label>
+                <input type="text" id="tema" placeholder="Ej: Leyes de Newton" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Grado escolar</label>
+                <input type="text" id="grado" placeholder="Ej: 6to Primaria" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+            <button onclick="generar()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-95">
+                Generar Planeación Mágica ✨
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // LÓGICA DE INSTALACIÓN PWA
+        let eventoInstalacion;
+        const banner = document.getElementById('installBanner');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            eventoInstalacion = e;
+            banner.style.display = 'flex'; // Muestra el banner real
+        });
+
+        async function ejecutarInstalacion() {
+            if (eventoInstalacion) {
+                eventoInstalacion.prompt();
+                const { outcome } = await eventoInstalacion.userChoice;
+                if (outcome === 'accepted') {
+                    banner.style.display = 'none';
+                }
+                eventoInstalacion = null;
+            }
+        }
+
+        // REGISTRO DEL SERVICE WORKER
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/public/sw.js')
+                .then(reg => console.log('SerenProfe listo'))
+                .catch(err => console.log('Error PWA', err));
+            });
+        }
+
+        // FUNCIÓN DE GENERACIÓN (Aquí conectarás con tu API de Gemini)
+        function generar() {
+            alert("Generando planeación con el marco legal de " + document.getElementById('pais').value);
+        }
+    </script>
+</body>
+</html>

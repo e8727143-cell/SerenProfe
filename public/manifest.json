@@ -1,7 +1,11 @@
 {
+  "name": "SerenProfe",
   "short_name": "SerenProfe",
-  "name": "SerenProfe: Tu Asistente Pedagógico",
-  "description": "Recupera tu paz mental y genera planeaciones en segundos.",
+  "description": "Asistente inteligente para docentes contra la burocracia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
   "icons": [
     {
       "src": "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/public/Galeria%20SerenProfe/logo%20pwa%20%20SerenProfe.jpg",
@@ -9,9 +13,5 @@
       "type": "image/jpeg",
       "purpose": "any maskable"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#10b981",
-  "background_color": "#ffffff"
+  ]
 }
