@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Loader2, Mail, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { supabase } from './lib/supabase';
+import InstallPrompt from './components/InstallPrompt';
 
 const LOGO_URL = "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/public/Galeria%20SerenProfe/Logo%20SerenProfe.png";
 
@@ -129,6 +130,10 @@ export default function Login({ onLogin }: LoginProps) {
           </div>
         </div>
       </motion.div>
+      
+      {/* Install PWA Prompt */}
+      <InstallPrompt />
     </div>
   );
 }
+

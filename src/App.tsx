@@ -79,6 +79,8 @@ const LOGO_URL = "https://lkwecoiwbprrjggjeusz.supabase.co/storage/v1/object/pub
 
 
 
+import InstallPrompt from './components/InstallPrompt';
+
 export default function App() {
   const [session, setSession] = useState<{ user: { email: string } } | null>(null);
   const [topic, setTopic] = useState('');
@@ -782,6 +784,8 @@ Usa ÚNICAMENTE la terminología oficial de ${paisNombre} (${terminologia}). NO 
           </div>
         </div>
       </div>
+      {/* Install PWA Prompt */}
+      <InstallPrompt />
     </div>
   );
 }
